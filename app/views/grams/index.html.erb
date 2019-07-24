@@ -1,1 +1,11 @@
 <h1>Grams</h1>
+
+<% if signed_in? %>
+	<%= link_to 'New Gram', new_gram_path %>
+	<br>
+
+	<% current_user.grams.each do |g| %>
+		<%= g.message %>
+		<br>
+	<% end %>
+<% end %>
