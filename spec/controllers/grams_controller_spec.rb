@@ -1,15 +1,5 @@
 require 'rails_helper'
 
-def sign_in_fake_user
-	@user = User.create(
-		email:                 'testuser@foo.bar',
-		password:              'cn45#28y3%t833awet',
-		password_confirmation: 'cn45#28y3%t833awet'
-	)
-
-	sign_in @user
-end
-
 RSpec.describe GramsController, type: :controller do
 
 	describe "grams#index action" do
@@ -26,7 +16,8 @@ RSpec.describe GramsController, type: :controller do
 		end
 
 		it "should successfully show the new form" do
-	      sign_in_fake_user
+	      user = FactoryBot.create(:user)
+	      sign_in user
 
 	      get :new
 	      expect(response).to have_http_status(:success)
@@ -40,45 +31,51 @@ RSpec.describe GramsController, type: :controller do
 		end
 
 		it "should successfully create a new gram in our database" do
-			sign_in_fake_user
+			user = FactoryBot.create(:user)
+	      	sign_in user
 
 			post :create, params: {gram: {message: 'Hello!'}}
 			expect(response).to redirect_to root_path
 			gram = Gram.last
 			expect(gram.message).to eq('Hello!')
-			expect(gram.user).to eq(@user)
+			expect(gram.user).to eq(user)
 		end
 
 		it "should successfully create a new 5char gram in our database" do
-			sign_in_fake_user
+			user = FactoryBot.create(:user)
+	      	sign_in user
 
 			post :create, params: {gram: {message: '#'*5}}
 			expect(response).to redirect_to root_path
 		end
 
 		it "should fail to create a new 4char gram in our database" do
-			sign_in_fake_user
+			user = FactoryBot.create(:user)
+	      	sign_in user
 
 			post :create, params: {gram: {message: '#'*4}}
 			expect(response).to have_http_status(:unprocessable_entity)
 		end
 
 		it "should successfully create a new 100char gram in our database" do
-			sign_in_fake_user
+			user = FactoryBot.create(:user)
+	      	sign_in user
 
 			post :create, params: {gram: {message:  '#'*100}}
 			expect(response).to redirect_to root_path
 		end
 
 		it "should fail to create a new 101char gram in our database" do
-			sign_in_fake_user
+			user = FactoryBot.create(:user)
+	      	sign_in user
 
 			post :create, params: {gram: {message:  '#'*101}}
 			expect(response).to have_http_status(:unprocessable_entity)
 		end
 
 		it "should properly deal with validation errors" do
-			sign_in_fake_user
+			user = FactoryBot.create(:user)
+	      	sign_in user
 
 			gram_count = Gram.count
 			post :create, params: {gram: {message: ''}}
