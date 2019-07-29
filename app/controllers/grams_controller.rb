@@ -1,5 +1,5 @@
 class GramsController < ApplicationController
-	before_action :authenticate_user!, only: [:new, :create, :edit]
+	before_action :authenticate_user!, only: [:new, :create, :edit, :update]
 
 	def index
 	end
@@ -31,6 +31,26 @@ class GramsController < ApplicationController
 			@gram = Gram.find(params[:id])
 		rescue
 			render :file => "/public/404.html",  :status => :not_found
+		end
+	end
+
+	def update
+		begin
+			@gram = Gram.find(params[:id])
+		rescue
+			return render :file => "/public/404.html",  :status => :not_found
+		end
+
+		if @gram.user_id != current_user.id
+			return render plain: "Unauthorized", status: :unauthorized
+		end
+
+		@gram.update_attributes(gram_params)
+
+		if @gram.invalid?
+			render :edit, status: :unprocessable_entity
+		else
+			redirect_to gram_path(@gram)
 		end
 	end
 

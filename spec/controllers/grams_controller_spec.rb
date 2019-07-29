@@ -37,6 +37,81 @@ RSpec.describe GramsController, type: :controller do
 		end
 	end
 
+	describe "grams#update action" do
+		it "should require users to be logged in" do
+			gram = FactoryBot.create(:gram)
+			patch :update, params: {id: gram.id, message: "this should fail"} 
+			expect(response).to redirect_to new_user_session_path
+		end
+
+		it "should return error 404 if gram not found" do
+			user = FactoryBot.create(:user)
+			sign_in user
+			patch :update, params: {id: 0, message: "this should 404"}
+			expect(response).to have_http_status :not_found
+		end
+
+		it "should update a gram if found and belongs to current user" do
+			user = FactoryBot.create(:user)
+			sign_in user
+
+			gram = FactoryBot.create(:gram, user: user)
+
+			patch :update, params: {id: gram.id, gram: { message: "this should succeed" }}
+			gram.reload()
+
+			expect(response).to redirect_to gram_path(gram)
+			expect(gram.message).to eq("this should succeed")
+		end
+
+		it "should return unauthorized if gram is found but does not belong to current user" do
+			user = FactoryBot.create(:user)
+			gram = FactoryBot.create(:gram, user: user)
+
+			user2 = FactoryBot.create(:user)
+			sign_in user2
+
+			patch :update, params: {id: gram.id, gram: { message: "this should fail" }}
+
+			expect(response).to have_http_status :unauthorized
+			expect(gram.message).to eq("Hello!")
+		end
+
+		it "should reject invalid message constraints" do
+			user = FactoryBot.create(:user)
+			sign_in user
+
+			gram = FactoryBot.create(:gram, user: user)
+
+			patch :update, params: {id: gram.id, gram: { message: "#"*4}}
+			expect(response).to have_http_status :unprocessable_entity
+			gram.reload()
+			expect(gram.message).to eq('Hello!')
+
+			patch :update, params: {id: gram.id, gram: { message: "#"*101}}
+			expect(response).to have_http_status :unprocessable_entity
+			gram.reload()
+			expect(gram.message).to eq('Hello!')
+		end
+
+		it "should accept valid message constraints" do
+			user = FactoryBot.create(:user)
+			sign_in user
+
+			gram = FactoryBot.create(:gram, user: user)
+
+			patch :update, params: {id: gram.id, gram: { message: "#"*5}}
+			expect(response).to redirect_to gram_path(gram)
+			gram.reload()
+			expect(gram.message).to eq("#"*5)
+
+			patch :update, params: {id: gram.id, gram: { message: "#"*100}}
+			expect(response).to redirect_to gram_path(gram)
+			gram.reload()
+			expect(gram.message).to eq("#"*100)
+		end
+	end
+
 	describe "grams#index action" do
 		it "should successfully show the page" do
 			get :index
