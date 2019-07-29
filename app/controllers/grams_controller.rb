@@ -1,5 +1,5 @@
 class GramsController < ApplicationController
-	before_action :authenticate_user!, only: [:new, :create]
+	before_action :authenticate_user!, only: [:new, :create, :edit]
 
 	def index
 	end
@@ -19,6 +19,14 @@ class GramsController < ApplicationController
 	end
 
 	def show
+		begin
+			@gram = Gram.find(params[:id])
+		rescue
+			render :file => "/public/404.html",  :status => :not_found
+		end
+	end
+
+	def edit
 		begin
 			@gram = Gram.find(params[:id])
 		rescue
