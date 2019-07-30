@@ -14,7 +14,7 @@ CarrierWave.configure do |config|
       google_json_key_string: ENV['GCS_KEY_JSON'],
     }
 
-    config.fog_directory = 'grammable-assaf-rahav-photos'
+    config.fog_directory = 'grammable-assaf-rahav'
 
     config.fog_public = false
   else
