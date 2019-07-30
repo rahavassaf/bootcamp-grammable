@@ -198,7 +198,12 @@ RSpec.describe GramsController, type: :controller do
 			user = FactoryBot.create(:user)
 	      	sign_in user
 
-			post :create, params: {gram: {message: 'Hello!'}}
+			post :create, params: {
+				gram: {
+					message: 'Hello!',
+					picture: fixture_file_upload("/picture.png", 'image/png')
+				}
+			}
 			expect(response).to redirect_to root_path
 			gram = Gram.last
 			expect(gram.message).to eq('Hello!')
@@ -209,7 +214,12 @@ RSpec.describe GramsController, type: :controller do
 			user = FactoryBot.create(:user)
 	      	sign_in user
 
-			post :create, params: {gram: {message: '#'*5}}
+			post :create, params: {
+				gram: {
+					message: '#'*5,
+					picture: fixture_file_upload("/picture.png", 'image/png')
+				}
+			}
 			expect(response).to redirect_to root_path
 		end
 
@@ -217,7 +227,12 @@ RSpec.describe GramsController, type: :controller do
 			user = FactoryBot.create(:user)
 	      	sign_in user
 
-			post :create, params: {gram: {message: '#'*4}}
+			post :create, params: {
+				gram: {
+					message: '#'*4,
+					picture: fixture_file_upload("/picture.png", 'image/png')
+				}
+			}
 			expect(response).to have_http_status(:unprocessable_entity)
 		end
 
@@ -225,7 +240,12 @@ RSpec.describe GramsController, type: :controller do
 			user = FactoryBot.create(:user)
 	      	sign_in user
 
-			post :create, params: {gram: {message:  '#'*100}}
+			post :create, params: {
+				gram: {
+					message: '#'*100,
+					picture: fixture_file_upload("/picture.png", 'image/png')
+				}
+			}
 			expect(response).to redirect_to root_path
 		end
 
@@ -233,7 +253,12 @@ RSpec.describe GramsController, type: :controller do
 			user = FactoryBot.create(:user)
 	      	sign_in user
 
-			post :create, params: {gram: {message:  '#'*101}}
+			post :create, params: {
+				gram: {
+					message: '#'*101,
+					picture: fixture_file_upload("/picture.png", 'image/png')
+				}
+			}
 			expect(response).to have_http_status(:unprocessable_entity)
 		end
 
