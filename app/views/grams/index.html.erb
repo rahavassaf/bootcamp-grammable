@@ -5,7 +5,10 @@
 	<br>
 
 	<% current_user.grams.each do |g| %>
-		<%= g.message %>
-		<br>
+		<div>
+			<h3><%= g.message %></h3>
+
+			<%= image_tag g.picture.url if g.picture.present? %>
+		</div>
 	<% end %>
 <% end %>

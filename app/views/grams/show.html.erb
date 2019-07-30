@@ -1,1 +1,5 @@
-<%= @gram.message %>
+<div>
+	<h3><%= @gram.message %></h3>
+
+	<%= image_tag @gram.picture.url if @gram.picture.present? %>
+</div>

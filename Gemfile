@@ -67,3 +67,8 @@ gem 'bootstrap', '>= 4.1.0.0'
 gem 'jquery-rails'
 gem 'simple_form'
 gem 'devise'
+
+gem 'mini_magick'
+gem 'fog-google'
+gem 'mime-types'
+gem 'carrierwave', '~> 1.0'

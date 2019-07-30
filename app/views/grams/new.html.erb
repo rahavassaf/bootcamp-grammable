@@ -1,6 +1,7 @@
 <div class="col-8 offset-2">
 	<%= simple_form_for @gram do |f| %>
 		<%= f.input :message %>
+		<%= f.file_field :picture %>
 		<%= f.submit "Post!" %>
 	<% end %>
 </div>
