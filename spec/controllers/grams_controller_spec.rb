@@ -21,15 +21,26 @@ RSpec.describe GramsController, type: :controller do
 			expect(response).to redirect_to new_user_session_path
 		end
 
-		it "should show the edit form if gram is found" do
+		it "should show the edit form if gram is found and owned by the current user" do
 			user = FactoryBot.create(:user)
 			sign_in user
-			gram = FactoryBot.create(:gram)
+			gram = FactoryBot.create(:gram, user: user)
 			get :edit, params: {id: gram.id}
 			expect(response).to have_http_status :success
 		end
 
-		it "should return error 404 if gran is not found" do
+		it "should return unauthorized if the gram is not owned by the current user" do
+			user = FactoryBot.create(:user)
+			gram = FactoryBot.create(:gram, user: user)
+
+			user2 = FactoryBot.create(:user)
+			sign_in user2
+			
+			get :edit, params: {id: gram.id}
+			expect(response).to have_http_status :unauthorized
+		end
+
+		it "should return error 404 if gram is not found" do
 			user = FactoryBot.create(:user)
 			sign_in user
 			get :edit, params: {id: 0}

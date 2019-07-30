@@ -30,7 +30,11 @@ class GramsController < ApplicationController
 		begin
 			@gram = Gram.find(params[:id])
 		rescue
-			render :file => "/public/404.html",  :status => :not_found
+			return render :file => "/public/404.html",  :status => :not_found
+		end
+
+		if @gram.user != current_user
+			return render plain: "Unauthorized", status: :unauthorized
 		end
 	end
 
