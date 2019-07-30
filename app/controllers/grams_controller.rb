@@ -1,5 +1,5 @@
 class GramsController < ApplicationController
-	before_action :authenticate_user!, only: [:new, :create, :edit, :update]
+	before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 
 	def index
 	end
@@ -52,6 +52,21 @@ class GramsController < ApplicationController
 		else
 			redirect_to gram_path(@gram)
 		end
+	end
+
+	def destroy
+		begin
+			@gram = Gram.find(params[:id])
+		rescue
+			return render :file => "/public/404.html",  :status => :not_found
+		end
+
+		if @gram.user != current_user
+			return render plain: "Unauthorized", status: :unauthorized
+		end
+
+		@gram.destroy
+		redirect_to root_path
 	end
 
 	private

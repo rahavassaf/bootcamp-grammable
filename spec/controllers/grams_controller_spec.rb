@@ -112,6 +112,49 @@ RSpec.describe GramsController, type: :controller do
 		end
 	end
 
+	describe "grams#destroy action" do
+		it "should require users to be logged in" do
+			gram = FactoryBot.create(:gram)
+			delete :destroy, params: {id: gram.id}
+			expect(response).to redirect_to new_user_session_path
+		end
+
+		it "should return error 404 if gram is not found" do
+			user = FactoryBot.create(:user)
+			sign_in user
+			delete :destroy, params: {id: 0}
+			expect(response).to have_http_status :not_found
+		end
+
+		it "should destroy a gram if it is found and owned by current user" do
+			user = FactoryBot.create(:user)
+			sign_in user
+
+			gram = FactoryBot.create(:gram, user: user)
+
+			delete :destroy, params: {id: gram.id}
+			expect(response).to redirect_to root_path
+
+			gram = Gram.last
+			expect(gram).to be_nil
+		end
+
+		it "should return unauthorized if gram is found but does not belong to current user" do
+			user = FactoryBot.create(:user)
+			gram = FactoryBot.create(:gram, user: user)
+
+			user2 = FactoryBot.create(:user)
+			sign_in user2
+
+			delete :destroy, params: {id: gram.id}
+
+			expect(response).to have_http_status :unauthorized
+
+			expect(Gram.last.id).to eq(gram.id)
+		end
+	end
+
+
 	describe "grams#index action" do
 		it "should successfully show the page" do
 			get :index
