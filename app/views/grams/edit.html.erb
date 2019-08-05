@@ -1,7 +1,10 @@
 <div class="col-8 offset-2">
 	<%= simple_form_for @gram do |f| %>
 		<%= f.input :message %>
+		<br>
+		Attach photo:
 		<%= f.file_field :picture %>
-		<%= f.submit %>
+		<br><br>
+		<%= f.submit "Update", class: "my-btn" %>
 	<% end %>
 </div>

@@ -1,14 +1,23 @@
-<h1>Grams</h1>
-
 <% if signed_in? %>
-	<%= link_to 'New Gram', new_gram_path %>
+	<div id="new_gram_link">
+		<%= link_to 'New Gram', new_gram_path %>
+	</div>
 	<br>
 
 	<% current_user.grams.each do |g| %>
-		<div>
-			<h3><%= g.message %></h3>
+		<div class="card col-10 offset-1">
+			<div class="handle"><%= g.user.email %></div>
 
 			<%= image_tag g.picture.url if g.picture.present? %>
+
+			<h3><%= g.message %></h3>
+
+			<div class="gram-actions float-right">
+				<% if signed_in? && current_user == g.user %>
+					<%= link_to 'Edit', edit_gram_path(g) %>
+				<% end %>
+			</div>
+			<br class="clear-fix" />
 		</div>
 	<% end %>
 <% end %>
