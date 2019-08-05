@@ -10,14 +10,20 @@
   </head>
 
   <body>
-    <nav>
-      <% if signed_in? %>
-        Welcome <%= current_user.email %>
-        <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %>
-      <% else %>
-        <%= link_to 'Sign In', new_user_session_path %>
-      <% end %>
-    </nav>
+    <div class="top-nav">
+        <div class="brand float-left">
+          Grammable
+        </div>
+
+        <div class="add float-rigth">
+          <% if signed_in? %>
+            Welcome <%= current_user.email %>
+            <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %>
+          <% else %>
+            <%= link_to 'Sign In', new_user_session_path %>
+          <% end %>
+        </div>
+    </div>
 
     <% if notice.present? %>
       <p class="alert alert-info"><%= notice %></p>

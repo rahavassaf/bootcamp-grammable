@@ -14,3 +14,37 @@
  *= require_self
  */
 @import "bootstrap";
+@import url('https://fonts.googleapis.com/css?family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans:100,300,400,600,700&display=swap');
+
+body {
+  background-color: #fafafa;
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+.top-nav {
+  	padding: 10px;
+	background-color: white;
+	border-bottom-color: #edeeee;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+
+	.add {
+		margin-top: 25px;
+
+		a {
+			font-weight: bold;
+		    color: #125688;
+		    font-size: 16px;
+		    padding-left: 8px;
+		}
+	}
+}
+
+
+.brand {
+  color: #125688;
+  font-size: 30px;
+  padding: 10px;
+  font-family: 'Pacifico', cursive;
+}
