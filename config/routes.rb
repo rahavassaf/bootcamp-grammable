@@ -5,5 +5,7 @@ Rails.application.routes.draw do
 
   root "grams#index"
 
-  resources :grams
+  resources :grams do
+  	resources :comments
+  end
 end
