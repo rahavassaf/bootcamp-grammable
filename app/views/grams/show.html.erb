@@ -1,5 +1,43 @@
-<div>
-	<h3><%= @gram.message %></h3>
+<div class="card col-10 offset-1">
+		<div class="handle"><%= @gram.user.email %></div>
 
-	<%= image_tag @gram.picture.url if @gram.picture.present? %>
-</div>
+		
+		<% if @gram.picture.present? %>
+			<div>
+				<%= image_tag @gram.picture.thumb.url, class: "gram_thumb img-fluid" %>
+			</div>
+		<% end %>
+
+		<h3><%= @gram.message %></h3>
+
+		<div class="gram-actions float-right">
+			<% if signed_in? && current_user == @gram.user %>
+				<%= link_to 'Edit', edit_gram_path(@gram) %>
+			<% end %>
+		</div>
+		<br class="clear-fix" />
+
+		<hr>
+
+		<div class="comments">
+			<h3>Comments</h3>
+
+			<% @gram.comments.each do |c| %>
+				<div class="comment">
+					<%= c.message %>
+					<br> -
+					<span class="comment_handle">
+						<%= c.user.email %>
+					</span>
+				</div>
+			<% end %>
+
+			<% if signed_in? %>
+				<br>
+				<%= simple_form_for Comment.new, url:gram_comments_path(@gram) do |f| %>
+					<%= f.input :message %>
+					<%= f.submit 'Add Comment', class: 'my-btn' %>
+				<% end %>
+			<% end %>
+		</div>
+	</div>

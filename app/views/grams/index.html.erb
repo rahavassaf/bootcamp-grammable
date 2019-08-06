@@ -1,15 +1,13 @@
-<% if signed_in? %>
-	<div id="new_gram_link">
-		<%= link_to 'New Gram', new_gram_path %>
-	</div>
-	<br>
-<% end %>
-
 <% Gram.all.each do |g| %>
 	<div class="card col-10 offset-1">
 		<div class="handle"><%= g.user.email %></div>
 
-		<%= image_tag g.picture.url if g.picture.present? %>
+		
+		<% if g.picture.present? %>
+			<div>
+				<%= image_tag g.picture.thumb.url, class: "gram_thumb img-fluid" %>
+			</div>
+		<% end %>
 
 		<h3><%= g.message %></h3>
 
@@ -20,26 +18,30 @@
 		</div>
 		<br class="clear-fix" />
 
+		<hr>
+
 		<div class="comments">
 			<h3>Comments</h3>
 
 			<% g.comments.each do |c| %>
 				<div class="comment">
+					<%= c.message %>
+					<br> -
 					<span class="comment_handle">
 						<%= c.user.email %>
 					</span>
-
-					<%= c.message %>
 				</div>
 			<% end %>
 
-			<h4>Add Comments</h4>
-			
-			<%= simple_form_for Comment.new, url:gram_comments_path(g) do |f| %>
-				<%= f.input :message %>
-				<%= f.submit 'Add Comment', class: 'my-btn' %>
+			<% if signed_in? %>
+				<hr>
+				<%= simple_form_for Comment.new, url:gram_comments_path(g) do |f| %>
+					<%= f.input :message %>
+					<%= f.submit 'Add Comment', class: 'my-btn' %>
+				<% end %>
 			<% end %>
 		</div>
 	</div>
 <% end %>
 
+&nbsp;
