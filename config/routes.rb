@@ -6,6 +6,6 @@ Rails.application.routes.draw do
   root "grams#index"
 
   resources :grams do
-  	resources :comments
+  	resources :comments, only: [:create]
   end
 end

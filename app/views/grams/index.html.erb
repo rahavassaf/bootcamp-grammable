@@ -14,6 +14,7 @@
 		<div class="gram-actions float-right">
 			<% if signed_in? && current_user == g.user %>
 				<%= link_to 'Edit', edit_gram_path(g) %>
+				<%= link_to 'Delete', gram_path(g), method: :delete, data: {confirm: 'Are you sure you want to delete this?'} %>
 			<% end %>
 		</div>
 		<br class="clear-fix" />
@@ -36,8 +37,8 @@
 			<% if signed_in? %>
 				<hr>
 				<%= simple_form_for Comment.new, url:gram_comments_path(g) do |f| %>
-					<%= f.input :message %>
-					<%= f.submit 'Add Comment', class: 'my-btn' %>
+					<%= f.input :message, placeholder: 'Add a new comment', label: false %>
+					<%= f.submit 'Add Comment',  class: 'my-btn' %>
 				<% end %>
 			<% end %>
 		</div>

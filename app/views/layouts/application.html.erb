@@ -12,11 +12,11 @@
   <body>
     <div class="top-nav">
         <div class=row>
-          <div class="brand col-4">
+          <div class="brand col-3">
             <%= link_to 'Grammable', root_path %>
           </div>
 
-          <div class="add col-4">
+          <div class="add col-6">
             <% if signed_in? %>
               Welcome <%= current_user.email %>
               <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %>
@@ -26,7 +26,7 @@
           </div>
 
           <% if signed_in? %>
-            <div class="add col-4">
+            <div class="add col-3">
                 <%= link_to 'New Gram', new_gram_path %>
             </div>
           <% end %>
